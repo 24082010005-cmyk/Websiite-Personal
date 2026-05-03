@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portofolio | Nama Kamu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    :root {
+      --bg: #07020f;
+      --card: #120c1b;
+      --text: #f8f7ff;
+      --muted: #c8c0da;
+      --primary: #a95ce8;
+      --primary-dark: #7b3bbc;
+      --border: #241b33;
+      --surface: rgba(111, 58, 190, 0.18);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Scroll Animation Classes */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-down {
+      opacity: 0;
+      transform: translateY(-40px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-down.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .fade-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Staggered delay for children */
+    .fade-up-delay-1 { transition-delay: 0.1s; }
+    .fade-up-delay-2 { transition-delay: 0.2s; }
+    .fade-up-delay-3 { transition-delay: 0.3s; }
+    .fade-up-delay-4 { transition-delay: 0.4s; }
+
+    body {
+      background: radial-gradient(circle at top left, rgba(120, 75, 210, 0.12), transparent 20%), var(--bg);
+      color: var(--text);
+      transition: opacity 0.28s ease, filter 0.28s ease;
+    }
+
+    body.scrolling {
+      opacity: 0.92;
+      filter: blur(0.08rem);
+    }
+
+    body.scroll-restored {
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    header {
+      width: 100%;
+      padding: 28px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10, 4, 23, 0.92);
+      backdrop-filter: blur(14px);
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo span,
+    .highlight {
+      color: var(--primary);
+    }
+
+    nav {
+      display: flex;
+      gap: 28px;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 26px;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    section {
+      padding: 90px 8%;
+    }
+
+    .hero {
+      min-height: 86vh;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 50px;
+      background: radial-gradient(circle at top right, rgba(169, 92, 232, 0.18), transparent 35%),
+                  radial-gradient(circle at bottom left, rgba(120, 75, 210, 0.14), transparent 28%);
+    }
+
+    .hero-text h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .hero-text h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      margin-bottom: 22px;
+    }
+
+    .typing-text {
+      display: inline;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .typing-text::after {
+      content: '|';
+      animation: blink 0.7s step-end infinite;
+      color: var(--primary);
+    }
+
+    /* Marquee effect after typing */
+    .typing-text.marquee-active {
+      display: inline-block;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .typing-text.marquee-active::after {
+      display: none;
+    }
+
+    .marquee-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-left 12s linear infinite;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .hero-text p {
+      color: var(--muted);
+      max-width: 820px;
+      line-height: 1.8;
+      font-size: 17px;
+      margin-bottom: 30px;
+    }
+
+    .socials {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .socials a {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--primary);
+      background: rgba(25, 12, 35, 0.95);
+      border: 1px solid rgba(155, 75, 160, 0.26);
+      font-size: 22px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .socials a:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px var(--primary);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 15px 32px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 0 25px rgba(169, 92, 232, 0.55);
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+    .hero-image {
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-image img {
+      width: min(430px, 100%);
+      height: min(430px, 100vw);
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid rgba(198, 120, 201, 0.25);
+      box-shadow: 0 0 55px rgba(198, 120, 201, 0.38);
+    }
+
+    .section-title {
+      font-size: 38px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .about,
+    .projects,
+    .contact {
+      background: rgba(13, 8, 23, 0.95);
+      border: 1px solid rgba(65, 26, 91, 0.15);
+      box-shadow: 0 12px 30px rgba(25, 9, 45, 0.28);
+    }
+
+    .about p {
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 17px;
+    }
+
+    .skills-grid,
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 40px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 100%;
+      background: rgba(169, 92, 232, 0.18);
+    }
+
+    .timeline-item {
+      position: relative;
+      width: calc(50% - 60px);
+      margin-bottom: 40px;
+    }
+
+    .flip-card {
+      perspective: 1200px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      min-height: 380px;
+      transition: transform 0.7s ease;
+      transform-style: preserve-3d;
+    }
+
+    .timeline-item:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .flip-card-front {
+      background: rgba(20, 10, 34, 0.98);
+      border: 1px solid var(--border);
+      padding: 24px 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .timeline-item:hover .flip-card-front {
+      border-color: var(--primary);
+    }
+
+    .flip-card-front h3 {
+      margin-bottom: 12px;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .flip-card-front-date {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-size: 14px;
+    }
+
+    .experience .timeline-item .flip-card-front-date {
+      position: absolute;
+      top: 28px;
+      margin-bottom: 0;
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-size: 32px;
+      white-space: nowrap;
+      text-align: left;
+      z-index: 10;
+    }
+
+    .experience .timeline-item:nth-child(odd) .flip-card-front-date {
+      right: -250px;
+      left: auto;
+    }
+
+    .experience .timeline-item:nth-child(even) .flip-card-front-date {
+      left: -250px;
+      right: auto;
+      text-align: right;
+    }
+
+    .experience .flip-card-front .flip-card-front-date {
+      position: static;
+      display: none;
+    }
+
+    .flip-card-front p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0 0 16px;
+      font-size: 14px;
+    }
+
+    .flip-card-front ul {
+      padding-left: 20px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      list-style: disc inside;
+    }
+
+    .flip-card-front ul li {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .flip-card-back {
+      background: #111;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flip-card-back img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .timeline-item:hover .flip-card-back {
+      border-color: var(--primary);
+    }
+
+    .timeline-item:nth-child(odd) {
+      left: 0;
+    }
+
+    .timeline-item:nth-child(even) {
+      left: calc(50% + 60px);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 4px solid var(--bg);
+    }
+
+    .timeline-item:nth-child(odd)::before {
+      right: -46px;
+    }
+
+    .timeline-item:nth-child(even)::before {
+      left: -46px;
+    }
+
+    .timeline-item h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .timeline-date {
+      position: absolute;
+      top: 40px;
+      right: -155px;
+      transform: translateY(-50%);
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-size: 32px;
+      white-space: nowrap;
+      text-align: left;
+    }
+
+    .education .timeline-item:nth-child(2) .timeline-date {
+      right: auto;
+      left: -155px;
+      text-align: right;
+    }
+
+    .timeline-item p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin: 0 0 14px;
+    }
+
+    .flip-card-back ul {
+      padding-left: 18px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .flip-card-back ul li {
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .timeline::before {
+        left: 20px;
+      }
+
+      .timeline-item,
+      .timeline-item:nth-child(odd),
+      .timeline-item:nth-child(even) {
+        width: calc(100% - 72px);
+        left: 0;
+        margin-left: 40px;
+      }
+
+      .timeline-item::before {
+        left: -46px;
+        right: auto;
+      }
+    }
+
+    .card {
+      background: rgba(20, 10, 34, 0.98);
+      padding: 26px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 0 25px rgba(169, 92, 232, 0.24);
+    }
+
+    .card i {
+      font-size: 36px;
+      color: var(--primary);
+      margin-bottom: 14px;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .contact-box {
+      max-width: 650px;
+      margin: auto;
+      text-align: center;
+      background: var(--card);
+      padding: 35px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .contact-box p {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .socials {
+        justify-content: center;
+      }
+
+      .hero-image {
+        order: -1;
+      }
+
+      nav {
+        position: absolute;
+        top: 86px;
+        right: 8%;
+        width: 220px;
+        background: #111;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        flex-direction: column;
+        padding: 20px;
+        display: none;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      .menu-icon {
+        display: block;
+      }
+
+      .skills-grid,
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Stars Effect */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+      animation: twinkle 3s infinite ease-in-out;
+    }
+
+    .falling-star {
+      animation: fall 10s linear infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    @keyframes fall {
+      0% { top: -10px; opacity: 1; }
+      100% { top: 110vh; opacity: 0; }
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: float 25s linear infinite;
+      pointer-events: none;
+    }
+
+    .rocket {
+      position: absolute;
+      font-size: 24px;
+      animation: rocket-fly 30s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0% { transform: translateX(-100px) translateY(0px); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateX(calc(100vw + 100px)) translateY(-100px); opacity: 0; }
+    }
+
+    @keyframes rocket-fly {
+      0% { left: -50px; top: 50%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { left: calc(100vw + 50px); top: 30%; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <header>
+    <a href="#" class="logo fade-up">Mochamad <span>Rico Andreano</span></a>
+
+    <nav id="navMenu">
+      <a href="#home" class="fade-up fade-up-delay-1">Home</a>
+      <a href="#about" class="fade-up fade-up-delay-2">Tentang</a>
+      <a href="#education" class="fade-up fade-up-delay-3">Pendidikan</a>
+      <a href="#skills" class="fade-up fade-up-delay-4">Skill</a>
+      <a href="#projects" class="fade-up fade-up-delay-5">Proyek</a>
+      <a href="#experience" class="fade-up fade-up-delay-6">Pengalaman</a>
+      <a href="#contact" class="fade-up fade-up-delay-7">Kontak</a>
+    </nav>
+
+    <div class="menu-icon" id="menuIcon">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-text">
+      <h1 class="fade-up">Hai, Saya <span class="highlight">Andre </span></h1>
+      <h2 class="fade-up fade-up-delay-1">Saya seorang <span class="typing-text"><span class="highlight" id="typingTarget"></span></span></h2>
+      <p class="fade-up fade-up-delay-2">
+        Mahasiswa Sistem Informasi yang tertarik dengan teknologi, desain web,
+        dan pengembangan aplikasi. Saya senang belajar hal baru dan membuat
+        proyek sederhana untuk meningkatkan kemampuan saya.
+      </p>
+
+      <div class="socials fade-up fade-up-delay-3">
+        <a href="https://www.linkedin.com/in/mochamad-rico-andreano-a5953133b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://github.com/24082010005-cmyk" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.instagram.com/andreazzx7?igsh=OWp3cDM3YndnMmN1" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://youtube.com/@andrekiyowo?si=oU2zrbFu8BCjW_7n" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+
+      <a href="assets/CV_Mochamad Rico Andreano_New.pdf" class="btn fade-up fade-up-delay-4" download>Unduh CV</a>
+    </div>
+
+    <div class="hero-image fade-right">
+      <img src="assets/profile.jpg" alt="Foto profil">
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <h2 class="section-title fade-up">Tentang <span class="highlight">Saya</span></h2>
+    <p class="fade-up fade-up-delay-1">
+      Saya adalah mahasiswa Sistem Informasi Semester 4 UPN “Veteran” Jawa Timur dengan latar belakang Teknik Komputer dan Jaringan serta minat pada bidang jaringan komputer dan infrastruktur IT. 
+      Memiliki pengalaman dalam melakukan konfigurasi perangkat jaringan seperti router dan Mikrotik, serta memahami dasar-dasar manajemen jaringan. 
+      Memiliki ketertarikan untuk berkembang di bidang Network Engineer dan IT Support, didukung dengan kemampuan problem solving, kerja tim, dan semangat belajar yang tinggi untuk berkontribusi dalam pengembangan sistem dan jaringan yang andal.
+    </p>
+  </section>
+
+  <section class="education" id="education">
+    <h2 class="section-title fade-up">Pendidikan</span></h2>
+    <div class="timeline fade-up fade-up-delay-1">
+      <div class="timeline-item">
+        <span class="timeline-date">2021</span>
+        <div class="card fade-up fade-up-delay-2">
+          <h3>SMA/SMK</h3>
+          <p style="color: var(--primary); font-size: 18px;">SMKS YAPALIS KRIAN</p>
+          <p>Teknik Komputer dan Jaringan</p>
+          <p>Predikat: Eligible 10 besar Teknik Komputer dan Jaringan</p>
+          <p>Proyek
+            <ul>
+              <li>Teknisi Lab Komputer</li>
+              <li>Pengembangan & Implementasi Lab Komputer</li>
+              <li>Merancang Sistem WiFi Voucher Berbasis Mikrotik</li>
+            </ul>
+          </p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-date">2024</span>
+        <div class="card fade-up fade-up-delay-3">
+          <h3>UNIVERSITAS</h3>
+          <p style="color: var(--primary); font-size: 18px;">Universitas Pembangunan Nasional “Veteran” Jawa Timur</p>
+          <p>S1 Sistem Informasi</p>
+          <p>Proyek
+            <ul>
+              <li>Aplikasi Simple Paint </li>
+              <li>Aplikasi Toko Kebutuhan Bayi</li>
+              <li>Aplikasi Sistem Iuran Kebersihan RT</li>
+              <li>Website Sistem Reservasi Lapangan Badminton</li>
+            </ul>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="skills" id="skills">
+    <h2 class="section-title fade-up">Skill</span></h2>
+
+    <div class="skills-grid">
+      <div class="card fade-up fade-up-delay-1">
+        <i class="fa-brands fa-html5"></i>
+        <h3>HTML</h3>
+        <p>Membuat struktur halaman website dengan rapi dan mudah dibaca.</p>
+      </div>
+
+      <div class="card fade-up fade-up-delay-2">
+        <i class="fa-brands fa-css3-alt"></i>
+        <h3>CSS</h3>
+        <p>Mengatur tampilan website agar menarik, responsif, dan modern.</p>
+      </div>
+
+      <div class="card fade-up fade-up-delay-3">
+        <i class="fa-brands fa-js"></i>
+        <h3>JavaScript</h3>
+        <p>Menambahkan interaksi sederhana seperti menu mobile dan animasi.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="projects" id="projects">
+    <h2 class="section-title fade-up">Proyek</span></h2>
+
+    <div class="project-grid">
+      <div class="card fade-up fade-up-delay-1">
+        <h3>Website Reservasi Badminton</h3>
+        <p>Website sederhana untuk menampilkan informasi dan reservasi lapangan badminton.</p>
+      </div>
+
+      <div class="card fade-up fade-up-delay-2">
+        <h3>Aplikasi Tugas</h3>
+        <p>Aplikasi sederhana untuk mencatat daftar tugas harian.</p>
+      </div>
+
+      <div class="card fade-up fade-up-delay-3">
+        <h3>Portfolio Website</h3>
+        <p>Website pribadi untuk menampilkan profil, skill, dan proyek.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="experience" id="experience">
+    <h2 class="section-title fade-up">Pengalaman</span></h2>
+    <div class="timeline fade-up fade-up-delay-1">
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Okt 2024</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA FUNTASTECH 2024 – UPNVJT, Surabaya</h3>
+              <p>Anggota Panitia Perlengkapan dan Konsumsi</p>
+              <ul>
+                <li>Bertanggung jawab dalam pengadaan dan distribusi perlengkapan serta konsumsi selama kegiatan berlangsung</li>
+                <li>Memastikan ketersediaan logistik sesuai kebutuhan acara secara tepat waktu</li>
+                <li>Berkoordinasi dengan tim untuk mendukung kelancaran operasional kegiatan</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/FuntasTeech.png" alt="Foto pengalaman Panitia Funtastech 2024">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Des 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA PEMIRA SISTEM INFORMASI 2025 – UPNVJT, Surabaya</h3>
+              <p>Anggota Panitia Perlengkapan dan Konsumsi</p>
+              <ul>
+                <li>Mengelola kebutuhan perlengkapan dan konsumsi untuk mendukung jalannya kegiatan pemira</li>
+                <li>Melakukan koordinasi dengan divisi lain untuk memastikan kesiapan logistik</li>
+                <li>Membantu memastikan kelancaran pelaksanaan acara melalui dukungan operasional</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/PemiraSIFO.png" alt="Foto pengalaman Panitia Pemira Sistem Informasi 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Jul 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA DIES NATALIS SISTEM INFORMASI 2025 – UPNVJT, Surabaya</h3>
+              <p>Anggota Panitia Perlengkapan dan Konsumsi</p>
+              <ul>
+                <li>Menyiapkan dan mengelola perlengkapan serta konsumsi selama kegiatan berlangsung</li>
+                <li>Mengatur distribusi logistik agar berjalan efektif dan efisien</li>
+                <li>Mendukung kelancaran acara melalui pengelolaan kebutuhan operasional</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/DiesnatalisSIFO.png" alt="Foto pengalaman Panitia Dies Natalis Sistem Informasi 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Agu 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA INFORMATION SYSTEM COMPETITION (ISC) 2025 – UPNVJT, Surabaya</h3>
+              <p>Anggota Panitia Perlengkapan dan Konsumsi</p>
+              <ul>
+                <li>Bertanggung jawab terhadap kesiapan perlengkapan dan konsumsi selama kompetisi berlangsung</li>
+                <li>Mengelola distribusi kebutuhan peserta dan panitia</li>
+                <li>Berkoordinasi dengan tim untuk menjaga kelancaran kegiatan</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/ISC.png" alt="Foto pengalaman Panitia Information System Competition 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Agu 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA DIES NATALIS FASILKOM 2025 – UPNVJT, Surabaya</h3>
+              <p>Anggota Panitia Perlengkapan dan Konsumsi</p>
+              <ul>
+                <li>Mengelola kebutuhan logistik dan konsumsi untuk mendukung kegiatan fakultas</li>
+                <li>Memastikan distribusi perlengkapan berjalan sesuai perencanaan</li>
+                <li>Berkolaborasi dengan panitia lain untuk menjaga efektivitas pelaksanaan acara</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/DiesnatalisFIK.png" alt="Foto pengalaman Panitia Dies Natalis Fasilkom 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Agu 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA MOSAIK KADERISASI FASILKOM 2025 – UPNVJT, Surabaya</h3>
+              <p>Senior Pendamping</p>
+              <ul>
+                <li>Membimbing dan mendampingi mahasiswa baru dalam proses kaderisasi fakultas</li>
+                <li>Membantu membangun kedisiplinan, kerja sama tim, dan adaptasi lingkungan kampus</li>
+                <li>Berperan aktif dalam menciptakan suasana pembelajaran yang kondusif</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/Mosaik.png" alt="Foto pengalaman Panitia Mosaik Kaderisasi Fasilkom 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Agu 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA DIMENSI (GRADASI) SISTEM INFORMASI 2025 – UPNVJT, Surabaya</h3>
+              <p>Senior Pendamping</p>
+              <ul>
+                <li>Mendampingi mahasiswa baru dalam kegiatan kaderisasi program studi</li>
+                <li>Memberikan arahan serta membantu proses pengembangan soft skill peserta</li>
+                <li>Mendorong partisipasi aktif dan kerja sama dalam setiap kegiatan</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/Dimensi.png" alt="Foto pengalaman Panitia Dimensi Gradasi Sistem Informasi 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Sep 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA EDISI (GRADASI) SISTEM INFORMASI 2025 – UPNVJT, Surabaya</h3>
+              <p>Anggota Panitia Perlengkapan dan Konsumsi</p>
+              <ul>
+                <li>Menyiapkan kebutuhan perlengkapan dan konsumsi selama kegiatan kaderisasi</li>
+                <li>Mengatur distribusi logistik untuk mendukung kelancaran acara</li>
+                <li>Berkoordinasi dengan tim dalam memastikan kesiapan operasional</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/Edisi.png" alt="Foto pengalaman Panitia Edisi Gradasi Sistem Informasi 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Okt 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>KETUA DIVISI AKSI PKM SISTEM INFORMASI 2025 – UPNVJT, Surabaya</h3>
+              <p>Ketua Divisi</p>
+              <ul>
+                <li>Memimpin tim dalam perencanaan dan pengelolaan perlengkapan serta konsumsi kegiatan</li>
+                <li>Mengatur distribusi logistik dan memastikan seluruh kebutuhan acara terpenuhi</li>
+                <li>Berkoordinasi dengan panitia inti untuk menjaga efektivitas dan kelancaran kegiatan</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/AksiPKM.png" alt="Foto pengalaman Ketua Divisi Aksi PKM Sistem Informasi 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Nov 2025</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA PENSI (GRADASI) SISTEM INFORMASI 2025 – UPNVJT, Surabaya</h3>
+              <p>Anggota Panitia Perlengkapan dan Konsumsi</p>
+              <ul>
+                <li>Mengelola kebutuhan perlengkapan dan konsumsi dalam kegiatan pentas seni kaderisasi</li>
+                <li>Memastikan distribusi logistik berjalan dengan baik selama acara</li>
+                <li>Mendukung kelancaran operasional kegiatan melalui koordinasi tim</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/Pensi.png" alt="Foto pengalaman Panitia Pensi Gradasi Sistem Informasi 2025">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Apr 2026</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA KPU PEMIRA FASILKOM 2026 – UPNVJT, Surabaya</h3>
+              <p>Anggota KPU</p>
+              <ul>
+                <li>Terlibat dalam penyelenggaraan proses pemilihan raya mahasiswa tingkat fakultas</li>
+                <li>Membantu pelaksanaan teknis pemira agar berjalan sesuai prosedur</li>
+                <li>Berkoordinasi dengan tim untuk menjaga transparansi dan kelancaran proses pemilihan</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/KPUPemira.jpeg" alt="Foto pengalaman Panitia KPU Pemira Fasilkom 2026">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="flip-card-front-date">Apr 2026</span>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>PANITIA PEMIRA FASILKOM 2026 – UPNVJT, Surabaya</h3>
+              <p>Bendahara BPH</p>
+              <ul>
+                <li>Bertanggung jawab dalam pengelolaan keuangan kegiatan</li>
+                <li>Melakukan pencatatan pemasukan dan pengeluaran secara terstruktur</li>
+                <li>Menyusun RAB serta memastikan penggunaan anggaran sesuai perencanaan</li>
+              </ul>
+            </div>
+            <div class="flip-card-back">
+              <img src="assets/BPHPemiraFIK.jpeg" alt="Foto pengalaman Panitia Pemira Fasilkom 2026">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <h2 class="section-title fade-up">Hubungi <span class="highlight">Saya</span></h2>
+
+    <div class="contact-box fade-up fade-up-delay-1">
+      <p>Silakan hubungi saya melalui email untuk kerja sama atau informasi lebih lanjut.</p>
+      <a href="mailto:emailkamu@example.com" class="btn">Kirim Email</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Mochamad Rico Andreano. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile Menu Toggle
+    const menuIcon = document.getElementById("menuIcon");
+    const navMenu = document.getElementById("navMenu");
+
+    menuIcon.addEventListener("click", () => {
+      navMenu.classList.toggle("active");
+    });
+
+    // Scroll Animation Observer
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          // Fade out when scrolling back up (element leaves viewport)
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all elements with animation classes
+    document.querySelectorAll('.fade-up, .fade-down, .fade-left, .fade-right').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Close mobile menu when clicking a nav link
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // Scroll fade effect for up/down motion
+    let lastScrollY = window.scrollY;
+    let scrollTimeout;
+
+    const setScrollFade = (direction) => {
+      document.body.classList.remove('scroll-restored');
+      if (direction === 'down' || direction === 'up') {
+        document.body.classList.add('scrolling-down');
+      }
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        document.body.classList.remove('scrolling-down');
+        document.body.classList.add('scroll-restored');
+      }, 180);
+    };
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY) {
+        setScrollFade('down');
+      } else if (currentScrollY < lastScrollY) {
+        setScrollFade('up');
+      }
+      lastScrollY = currentScrollY;
+    });
+
+    // Typing Effect for "Mahasiswa Aktif"
+    const textToType = "Mahasiswa Aktif";
+    const typingElement = document.getElementById('typingTarget');
+    let charIndex = 0;
+
+    function typeText() {
+      if (charIndex < textToType.length) {
+        typingElement.textContent += textToType.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeText, 150); // Speed of typing
+      }
+    }
+
+    // Start typing when page loads
+    setTimeout(typeText, 1000); // Delay 1 second before starting
+
+    // Generate Stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 200; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.width = Math.random() * 5 + 2 + 'px';
+      star.style.height = star.style.width;
+      star.style.animationDelay = Math.random() * 3 + 's';
+      if (i % 20 === 0) { // Every 20th star is falling
+        star.classList.add('falling-star');
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = '-10px';
+        star.style.width = Math.random() * 3 + 3 + 'px';
+        star.style.height = star.style.width;
+        star.style.animationDelay = Math.random() * 10 + 's';
+      }
+      starsContainer.appendChild(star);
+    }
+
+    // Generate Particles
+    for (let i = 0; i < 10; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.width = Math.random() * 4 + 2 + 'px';
+      particle.style.height = particle.style.width;
+      particle.style.animationDelay = Math.random() * 25 + 's';
+      starsContainer.appendChild(particle);
+    }
+
+    // Generate Rocket
+    const rocket = document.createElement('div');
+    rocket.classList.add('rocket');
+    rocket.textContent = '🚀';
+    rocket.style.top = Math.random() * 50 + 25 + '%';
+    rocket.style.animationDelay = Math.random() * 30 + 's';
+    starsContainer.appendChild(rocket);
+  </script>
+</body>
+</html>
